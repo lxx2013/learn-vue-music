@@ -19,6 +19,6 @@ export default {
 }
 </script> 
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '~src/common/stylus/index.styl'
 </style>
