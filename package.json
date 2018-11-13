@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "better-scroll": "^1.13.2",
+    "element-ui": "^2.4.9",
     "jsonp": "^0.2.1",
+    "swiper": "^4.4.2",
     "vue": "^2.5.2",
+    "vue-lazyload": "^1.2.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
