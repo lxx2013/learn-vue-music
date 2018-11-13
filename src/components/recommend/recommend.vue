@@ -1,10 +1,10 @@
 <template>
   <div class="recommend" ref="recommend">
-     <el-carousel :interval="4000" type="card" height="200px">
+     <el-carousel :interval="4000" type="card" height="20vw">
     <el-carousel-item v-for="(item, index) in recommends" :key="index">
       <a :href="item.linkUrl">
                 <img :src="item.picUrl">
-              </a>
+      </a>
     </el-carousel-item>
   </el-carousel>
      <div class="recommend-list">
@@ -73,6 +73,14 @@ export default {
 @import '~common/stylus/variable'
 
 .recommend {
+  .el-carousel{
+    .el-carousel__item{
+      width 50vw
+      img{
+        width 100%
+      }
+    }
+  }
   .recommend-list {
       display flex
       flex-direction row
