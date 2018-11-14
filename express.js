@@ -3,13 +3,7 @@ import axios from 'axios'
 
 const app = express()
 
-app.get('/api/getRecommends',async(req,res)=>{
-    let {code,data} = await axios.get('https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg')
-    if(code) { console.log('/api/getRecommend Error')}
-    else if(data){
-        res.json(data)
-    }
-})
+
 
 app.all("*", function (req, res, next) {
 

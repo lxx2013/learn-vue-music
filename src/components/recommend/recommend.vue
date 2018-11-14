@@ -35,11 +35,10 @@
 </template>
 
 <script>
-import slider from "../base/slider.vue";
 import jsonp from "common/js/jsonp";
 export default {
   components: {
-    slider
+    
   },
   data() {
     return {
