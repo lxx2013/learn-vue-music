@@ -1,7 +1,7 @@
 # learn-vue-music
 >学写一个音乐播放器
 
-计划:
+## 计划:
 - [ ] (第一步使用原课程中的打包逻辑)用 js 模块的思想研究一下 webpack 配置
 - [ ] 完成主项目前端内容(简单的代码不好意思地 copy 一下别人现有的代码以求快速产品迭代 [参考1]()  [参考2]())
 - [ ] 后端试用一下 express 比较和 koa 的区别
@@ -17,8 +17,23 @@
   - [ ] 请求音频失败时的处理
   - [ ] 移动端 input 引起的缩放异常
 
-知识点总结:
-1. SVG
-1. 音频信息处理
-1. 移动端滚动
+## 知识点总结:
+### 1. SVG
+### 2. 音频信息处理
+### 3. 移动端滚动
+### 4. Webpack 配置
+- 别名(alias + resolve)[腾讯文档](https://webpack.docschina.org/configuration/resolve/):
+    ```js
+    module.exports = {
+    //...
+        resolve: {
+            extensions: ['.js', '.vue', '.json'],
+            alias: {
+                'vue$': 'vue/dist/vue.js',
+                'src': resolve('src'),
+            }
+        }
+    },
+    ```
+    其中`$`表示精确匹配
 
