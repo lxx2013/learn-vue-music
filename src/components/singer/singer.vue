@@ -1,10 +1,6 @@
 <template>
   <div class="singer">
-    <listview :data="map" @select="getSingerDetial"></listview>
-   <!-- <transition :name="showClass">
-      <singer-detial class="singer-content" v-if="isDetial"></singer-detial>
-    </transition> -->
-    
+    <listview :data="map" @select="getSingerDetial"></listview>  
   </div>
 </template>
 
@@ -12,17 +8,14 @@
 <script>
 const ERR_OK = 0;
 const HOT_NAME = "热门";
-const HOT_SINGER_LENGTH = 10;
-import Singer from "../../commom/js/singer.js";
-import Listview from "../../base/listview/listview.vue";
-import singerDetial from "../../components/singer-detial/singer-detial.vue";
-import { getSinger } from "../../api/singer.js";
-import {mapMutations} from 'vuex'
+import Pinyin from 'common/js/ChinesePY'
+import Listview from "../base/listview.vue";
+import { getSinger, Singer } from "../../api/singer.js";
+import { mapMutations } from "vuex";
 
 export default {
   components: {
-    Listview,
-    singerDetial
+    Listview
   },
   created() {
     this._getSinger();
@@ -32,49 +25,55 @@ export default {
       singers: {},
       map: [],
       isDetial: false,
-      showClass:'slideTo',
+      showClass: "slideTo"
     };
   },
   methods: {
-    _getSinger() {
-      getSinger().then(res => {
-        if (res.code === ERR_OK) {
-          console.log("singer");
-          console.log(res.data);
-          this.singers = res.data.list;
-          //console.log(this.recommends.slider.length);
-          this._normalizeSinger(this.singers);
-         
-          }
-      });
+    async _getSinger() {
+      let { singerList } = await getSinger();
+      console.log("singer");
+      console.log(singerList.data);
+      this.singers = this._normalizeSinger(singerList.data.singerlist);
     },
-    _normalizeSinger(list) {
+
+    // 此时的list是根据歌手的热度排序的，不符合名字首字母排序
+    _normalizeSinger (list) {
+      // console.log(list)
       let map = {
         hot: {
           title: HOT_NAME,
           items: []
         }
-      };
-      list.forEach((element, index) => {
-        if (index < HOT_SINGER_LENGTH) {
-          map.hot.items.push(
-            new Singer(element.Fsinger_mid, element.Fsinger_name)
-          );
+      }
+      list.forEach((item, index) => {
+        if (index < 3) {
+          map.hot.items.push(new Singer({
+            name: item.singer_name,
+            id: item.singer_mid
+          }))
         }
-        let key = element.Findex;
+        // JS实现获取汉字首字母拼音、全拼音及混拼音的方法_javascript技巧_脚本之家 https://www.jb51.net/article/128190.htm
+        item.Findex = Pinyin.GetJP(item.singer_name.substr(0, 1))
+        // console.log('Findex', item.Findex)
+        const key = item.Findex
         if (!map[key]) {
           map[key] = {
             title: key,
             items: []
-          };
+          }
         }
-        map[key].items.push(
-          new Singer(element.Fsinger_mid, element.Fsinger_name)
-        );
-      });
-      console.log(map);
-      this.map = map;
-      this._orderList(this.map);
+        map[key].items.push(new Singer({
+          id: item.singer_mid,
+          name: item.singer_name
+        }))
+      })
+      // 处理map 为 ["热门","a",b,c,d,...,z]
+      let ret = []
+      for(let i in map){
+        ret.push(map[i])
+      }
+      ret.sort((a, b) => a.title == HOT_NAME ? -1 : b.title ==HOT_NAME?1:(a.title[0] < b.title[0]? -1:1))
+      return ret
     },
     _orderList(list) {
       let hot = [];
@@ -96,37 +95,33 @@ export default {
       console.log(this.map);
     },
     ...mapMutations({
-      setSinger:'SET_SINGER',
-      showContent:'SHOW_CONTENT'
+      setSinger: "SET_SINGER",
+      showContent: "SHOW_CONTENT"
     }),
     getSingerDetial(singer) {
-      this.showContent('singer-detial');
+      this.showContent("singer-detial");
       this.setSinger(singer);
       console.log("singer-detial");
       this.$router.push({
         path: `/singer/${singer.id}`
       });
-    },
-    
-
+    }
   },
-  watch:{
-     '$route'(to, from){
-       let indexTo = [];
-       let indexFrom = [];
-      indexTo = to.path.split('/');
-      indexFrom = from.path.split('/');
-       if(indexTo.length > indexFrom.length)
-       {
-         this.isDetial = true;
-         this.showClass = 'slideTo';
-         console.log(1);
-       }
-       else{
-         this.showClass = 'slideFrom';
-         this.isDetial = false;
-       }
-     }
+  watch: {
+    $route(to, from) {
+      let indexTo = [];
+      let indexFrom = [];
+      indexTo = to.path.split("/");
+      indexFrom = from.path.split("/");
+      if (indexTo.length > indexFrom.length) {
+        this.isDetial = true;
+        this.showClass = "slideTo";
+        console.log(1);
+      } else {
+        this.showClass = "slideFrom";
+        this.isDetial = false;
+      }
+    }
   }
 };
 </script>
@@ -134,31 +129,8 @@ export default {
 
 <style lang="stylus" scoped>
 .singer {
-  height: 100%;
-  widows: 100%;
+  background-color aqua
+  min-height 100vh
 }
 
-.singer-content {
-  position: absolute;
-  top: 0;
-  bottom :0px;
-  left: 0px;
-
-  width: 100%;
-  background :white;
-  color :black;
- 
-  z-index:100;
-
-}
-
-.slideTo-enter,.slideTo-leave-to{
-  transform :translate3d(100%,0,0);
-}
-.slideTo-enter-to,.slideTo-leave{
-
-}
-.slideTo-enter-active,.slideTo-leave-active{
-  transition :all 0.5s;
-}
 </style>

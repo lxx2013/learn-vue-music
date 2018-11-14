@@ -37,9 +37,7 @@
 <script>
 import jsonp from "common/js/jsonp";
 export default {
-  components: {
-    
-  },
+  components: {},
   data() {
     return {
       recommends: [],
@@ -72,47 +70,60 @@ export default {
 @import '~common/stylus/variable'
 
 .recommend {
-  .el-carousel{
-    .el-carousel__item{
+  .el-carousel {
+    .el-carousel__item {
       width 50vw
-      img{
+
+      img {
         width 100%
       }
     }
   }
+
   .recommend-list {
-      display flex
-      flex-direction row
-      flex-wrap wrap
-      box-sizing border-box
-      padding 0 0px 0 10px
-      overflow hidden
-      .song-item {
-        padding 10px 10px 0 0px
-        margin 0
+    display flex
+    flex-direction row
+    flex-wrap wrap
+    box-sizing border-box
+    padding 0 0px 0 10px
+    overflow hidden
 
-        .icon {
-          img {
-            width 100%
-          }
-        }
+    .song-item {
+      padding 10px 10px 0 0px
+      margin 0
 
-        .text {
-                  background white
-
-          .name {
-            font-size 14px
-            text-overflow ellipsis
-            white-space nowrap
-            overflow hidden
-          }
-
-          .desc {
-            font-size 12px
-          }
+      @media screen and (min-width: 420px) {
+        & {
+          max-width 33%
         }
       }
-    
+      @media screen and (min-width: 60px) {
+        & {
+          max-width 25%
+        }
+      }
+
+      .icon {
+        img {
+          width 100%
+        }
+      }
+
+      .text {
+        background white
+
+        .name {
+          font-size 14px
+          text-overflow ellipsis
+          white-space nowrap
+          overflow hidden
+        }
+
+        .desc {
+          font-size 12px
+        }
+      }
+    }
   }
 }
 </style>
